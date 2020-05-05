@@ -23,14 +23,13 @@ filebeat.modules:
     var.paths: ["/var/log/mysql/error.log*"]
   slowlog:
     var.paths: ["/var/log/mysql/mysql-slow.log*"]
-filebeat.prospectors:
-- type: log
-  paths:
-   - '/var/lib/docker/containers/*/*.log'
-  json.message_key: log
-  json.keys_under_root: true
-  processors:
-  - add_docker_metadata: ~
+filebeat.autodiscover:
+  providers:
+    - type: docker
+      hints.enabled: true
+processors:
+- add_cloud_metadata: ~
+
 #All data to indexed to Elasticsearch
 output.elasticsearch:
-  hosts: ["elasticsearch:9200"]
+  hosts: 'elasticsearch:9200'
